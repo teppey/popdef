@@ -1,7 +1,7 @@
 " File: popdef.vim
 " Description: List and select definitions in popup window.
 " Author: Teppei Hamada <temada@gmail.com>
-" Version: 0.4
+" Version: 0.5
 
 if exists('g:loaded_popdef')
   finish
@@ -33,8 +33,7 @@ func! s:Open(pattern, ...)
     let lnum = 1
     let lmax = line('$')
     let lcur = line('.')
-    let lprev = 1
-    let firstline = 0
+    let here = 0
     while lnum <= lmax
         let line = getline(lnum)
         if line =~ a:pattern
@@ -42,10 +41,9 @@ func! s:Open(pattern, ...)
             let line2 = getline(lnum2)
             if strlen(line2)
                 call add(defs, printf('%5d  %s', lnum2, line2))
-                if lcur >= lprev && lcur < lnum2
-                    let firstline = len(defs) - 1
+                if lcur - lnum2 >= 0
+                    let here = len(defs)
                 endif
-                let lprev = lnum2
             endif
         endif
         let lnum += 1
@@ -96,9 +94,9 @@ func! s:Open(pattern, ...)
                 \ maxheight: 40,
                 \ fixed: 1,
                 \ wrap: 1,
-                \ firstline: firstline,
                 \})
     call win_execute(winid, 'let w:prev_key = ""')
+    call win_execute(winid, printf('normal %dj', here-1))
 endfunction
 
 let &cpo = s:cpo_save
