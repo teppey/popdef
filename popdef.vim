@@ -11,21 +11,31 @@ let g:loaded_popdef = 1
 let s:cpo_save = &cpo
 set cpo&vim
 
-command PopDefPython call s:PopDefOpen('\s*\(def\|class\)\s\+[_a-zA-Z+0-9]\+')
-autocmd FileType python nnoremap <silent> <Leader>d :PopDefPython<CR>
+command PopDef call s:PopDefDispatchByFiletype()
 
-command PopDefVim call s:PopDefOpen('^\s*func')
-autocmd FileType vim nnoremap <silent> <Leader>d :PopDefVim<CR>
+let s:popdef_default_maxheight = 40
 
-command PopDefC call s:PopDefOpen('^[a-zA-Z_]\+.*)\( *{\)\?$')
-autocmd FileType c nnoremap <silent> <Leader>d :PopDefC<CR>
+" TODO: support function
+" TODO: support list of patterns or functions
+let s:popdef_default_patterns = #{
+    \ asciidoc: '^=\{1,6} ',
+    \ c:        '^[a-zA-Z_]\+.*)\( *{\)\?$',
+    \ cpp:      '^[a-zA-Z_].*$',
+    \ python:   '\s*\(def\|class\)\s\+[_a-zA-Z+0-9]\+',
+    \ vim:      '^\s*func',
+    \}
 
-" command PopDefCPP call s:PopDefOpen('^\([a-zA-Z_]\+.*)\( *const\)\?\|\(template .*\)\?class [a-zA-Z_].*\)\( *{\)\?$')
-command PopDefCPP call s:PopDefOpen('^[a-zA-Z_].*$')
-autocmd FileType cpp nnoremap <silent> <Leader>d :PopDefCPP<CR>
-
-command PopDefAsciiDoc call s:PopDefOpen('^=\{1,6} ')
-autocmd FileType asciidoc nnoremap <silent> <Leader>d :PopDefAsciiDoc<CR>
+" TODO: show message if pattern not found
+func! s:PopDefDispatchByFiletype()
+    let ft_var_name = printf('popdef_%s_pattern', &filetype)
+    let pattern = get(g:, ft_var_name, '')
+    if empty(pattern)
+        let pattern = get(s:popdef_default_patterns, &filetype, '')
+    endif
+    if !empty(pattern)
+        call s:PopDefOpen(pattern)
+    endif
+endfunc
 
 func! s:PopDefOpen(pattern, ...)
     let offset = get(a:, 1, 0)
@@ -91,7 +101,7 @@ func! s:PopDefOpen(pattern, ...)
     let winid = popup_menu(defs, #{
                 \ filter: function('s:MyMenuFilter'),
                 \ callback: function('s:Callback'),
-                \ maxheight: 40,
+                \ maxheight: get(g:, 'popdef_maxheight', s:popdef_default_maxheight),
                 \})
     call win_execute(winid, 'let w:prev_key = ""')
     if here > 1
