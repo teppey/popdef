@@ -1,5 +1,5 @@
 " File: popdef.vim
-" Description: List and select definitions in popup window.
+" Description: Show a list of definitions (function, class, etc) in a popup window.
 " Author: Teppei Hamada <temada@gmail.com>
 " Version: 0.5
 
@@ -11,29 +11,29 @@ let g:loaded_popdef = 1
 let s:cpo_save = &cpo
 set cpo&vim
 
-command PopDefPython call s:Open('\s*\(def\|class\)\s\+[_a-zA-Z+0-9]\+')
+command PopDefPython call s:PopDefOpen('\s*\(def\|class\)\s\+[_a-zA-Z+0-9]\+')
 autocmd FileType python nnoremap <silent> <Leader>d :PopDefPython<CR>
 
-command PopDefVim call s:Open('^\s*func')
+command PopDefVim call s:PopDefOpen('^\s*func')
 autocmd FileType vim nnoremap <silent> <Leader>d :PopDefVim<CR>
 
-command PopDefC call s:Open('^[a-zA-Z_]\+.*)\( *{\)\?$')
+command PopDefC call s:PopDefOpen('^[a-zA-Z_]\+.*)\( *{\)\?$')
 autocmd FileType c nnoremap <silent> <Leader>d :PopDefC<CR>
 
-" command PopDefCPP call s:Open('^\([a-zA-Z_]\+.*)\( *const\)\?\|\(template .*\)\?class [a-zA-Z_].*\)\( *{\)\?$')
-command PopDefCPP call s:Open('^[a-zA-Z_].*$')
+" command PopDefCPP call s:PopDefOpen('^\([a-zA-Z_]\+.*)\( *const\)\?\|\(template .*\)\?class [a-zA-Z_].*\)\( *{\)\?$')
+command PopDefCPP call s:PopDefOpen('^[a-zA-Z_].*$')
 autocmd FileType cpp nnoremap <silent> <Leader>d :PopDefCPP<CR>
 
-command PopDefAsciiDoc call s:Open('^=\{1,6} ')
+command PopDefAsciiDoc call s:PopDefOpen('^=\{1,6} ')
 autocmd FileType asciidoc nnoremap <silent> <Leader>d :PopDefAsciiDoc<CR>
 
-func! s:Open(pattern, ...)
+func! s:PopDefOpen(pattern, ...)
     let offset = get(a:, 1, 0)
     let defs = []
     let lnum = 1
     let lmax = line('$')
     let lcur = line('.')
-    let here = 0
+    let here = 1
     while lnum <= lmax
         let line = getline(lnum)
         if line =~ a:pattern
@@ -92,12 +92,12 @@ func! s:Open(pattern, ...)
                 \ filter: function('s:MyMenuFilter'),
                 \ callback: function('s:Callback'),
                 \ maxheight: 40,
-                \ fixed: 1,
-                \ wrap: 1,
                 \})
     call win_execute(winid, 'let w:prev_key = ""')
-    call win_execute(winid, printf('normal %dj', here-1))
-endfunction
+    if here > 1
+        call win_execute(winid, printf('normal %dj', here-1))
+    endif
+endfunc
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
