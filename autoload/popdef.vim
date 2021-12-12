@@ -3,17 +3,12 @@
 " Author: Teppei Hamada <temada@gmail.com>
 " Version: 0.5
 
-if exists('g:loaded_popdef')
-  finish
-endif
-let g:loaded_popdef = 1
-
 let s:cpo_save = &cpo
 set cpo&vim
 
-command PopDef call s:PopDefDispatchByFiletype()
-
-let s:popdef_default_maxheight = 40
+if !exists('g:popdef_maxheight')
+    let g:popdef_maxheight = 40
+endif
 
 " TODO: support function
 " TODO: support list of patterns or functions
@@ -26,7 +21,7 @@ let s:popdef_default_patterns = #{
     \}
 
 " TODO: show message if pattern not found
-func! s:PopDefDispatchByFiletype()
+func! popdef#PopDefDispatch()
     let ft_var_name = printf('popdef_%s_pattern', &filetype)
     let pattern = get(g:, ft_var_name, '')
     if empty(pattern)
@@ -60,13 +55,13 @@ func! s:PopDefOpen(pattern, ...)
     endwhile
 
     func! s:MyMenuFilter(id, key)
-        " 1行目に移動
+        " <Home>: Move to first line
         if a:key is# "\<Home>"
             call win_execute(a:id, '1')
             return 1
         endif
 
-        " ggで一行目に移動
+        " gg: Move to first line
         if a:key is# 'g'
             let prev_key = getwinvar(a:id, 'prev_key', '')
             if prev_key == 'g'
@@ -78,7 +73,7 @@ func! s:PopDefOpen(pattern, ...)
             return 1
         endif
 
-        " 最終行に移動
+        " <End>, G: Move to last line
         if a:key is# "\<End>" || a:key is# 'G'
             call win_execute(a:id, 'normal G')
             return 1
@@ -101,7 +96,7 @@ func! s:PopDefOpen(pattern, ...)
     let winid = popup_menu(defs, #{
                 \ filter: function('s:MyMenuFilter'),
                 \ callback: function('s:Callback'),
-                \ maxheight: get(g:, 'popdef_maxheight', s:popdef_default_maxheight),
+                \ maxheight: g:popdef_maxheight,
                 \})
     call win_execute(winid, 'let w:prev_key = ""')
     if here > 1
