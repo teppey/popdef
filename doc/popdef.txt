@@ -1,0 +1,28 @@
+*popdef.txt*  Plugin for show a list of definitions in a popup window
+
+Version: 0.5
+Author: Teppei Hamada <temada@gmail.com>
+
+This plugin displays a list of function and class names in a popup window.
+このプラグインは関数やクラス名のリストをポップアップウィンドウに表示します。
+
+You can move to the selected line from the displayed list.
+表示されたリストから選択した行に移動することができます。
+
+By default, the following file types are supported: AsciiDoc, C, C++, Python, Markdown, Vim
+デフォルトでは以下のファイルタイプに対応しています: AsciiDoc, C, C++, Python, Markdown, Vim
+
+It can be easily added by specifying a function or class definition pattern.
+関数やクラス定義のパターンを指定することで、簡単に追加することができます。
+
+    Example: add Ruby pattern
+        let g:popdef_ruby_pattern = '\s*\(def\|class\|module\)\s'
+
+Commands:
+    :PopDef
+                                                               *popdef-settings*
+g:popdef_maxheight
+    Maximum height of popup window.
+
+g:popdef_{filetype}_pattern
+    filetypeのパターンを指定します。
