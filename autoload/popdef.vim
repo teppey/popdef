@@ -17,6 +17,7 @@ let s:popdef_default_patterns = #{
     \ c:        '^[a-zA-Z_]\+.*)\( *{\)\?$',
     \ cpp:      '^[a-zA-Z_].*$',
     \ python:   '\s*\(def\|class\)\s\+[_a-zA-Z+0-9]\+',
+    \ markdown: '^#\{1,6} ',
     \ vim:      '^\s*func',
     \}
 
