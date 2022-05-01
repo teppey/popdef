@@ -80,6 +80,16 @@ func! s:PopDefOpen(pattern, ...)
             return 1
         endif
 
+        if a:key is# "\<C-F>"
+            call win_execute(a:id, "normal \<C-F>")
+            return 1
+        endif
+
+        if a:key is# "\<C-B>"
+            call win_execute(a:id, "normal \<C-B>")
+            return 1
+        endif
+
         call win_execute(a:id, 'let w:prev_key = ""')
         return popup_filter_menu(a:id, a:key)
     endfunc
@@ -98,6 +108,7 @@ func! s:PopDefOpen(pattern, ...)
                 \ filter: function('s:MyMenuFilter'),
                 \ callback: function('s:Callback'),
                 \ maxheight: g:popdef_maxheight,
+                \ minheight: min([len(defs), g:popdef_maxheight]),
                 \})
     call win_execute(winid, 'let w:prev_key = ""')
     if here > 1
