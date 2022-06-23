@@ -56,6 +56,30 @@ func! s:PopDefOpen(pattern, ...)
     endwhile
 
     func! s:MyMenuFilter(id, key)
+        let search_mode = getwinvar(a:id, 'search_mode')
+
+        if search_mode && a:key is# "\<Enter>"
+            let search_pattern = getwinvar(a:id, 'search_pattern')
+            call win_execute(a:id, printf("normal /%s\<Enter>", search_pattern))
+            call win_execute(a:id, 'normal zz')
+            call win_execute(a:id, 'let w:search_pattern = ""')
+            call win_execute(a:id, 'let w:search_mode = v:false')
+            return 1
+        endif
+
+        if search_mode && a:key =~ '[-.,_/+=%()a-zA-Z0-9]'
+            let search_pattern = getwinvar(a:id, 'search_pattern') . a:key
+            call win_execute(a:id, printf("let w:search_pattern = '%s'", search_pattern))
+            call popup_setoptions(a:id, #{title: printf(' Search: %s ', search_pattern)})
+            return 1
+        endif
+
+        if a:key is# '/'
+            call popup_setoptions(a:id, #{title: ' Search: '})
+            call win_execute(a:id, 'let w:search_mode = v:true')
+            return 1
+        endif
+
         " <Home>: Move to first line
         if a:key is# "\<Home>"
             call win_execute(a:id, '1')
@@ -111,6 +135,7 @@ func! s:PopDefOpen(pattern, ...)
                 \ minheight: min([len(defs), g:popdef_maxheight]),
                 \})
     call win_execute(winid, 'let w:prev_key = ""')
+    call win_execute(winid, 'let w:search_mode = v:false')
     if here > 1
         call win_execute(winid, printf('normal %dj', here-1))
     endif
