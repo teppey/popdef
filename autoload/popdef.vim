@@ -148,6 +148,21 @@ func! s:PopDefOpen(pattern, ...)
             return 1
         endif
 
+        if a:key is# 'H'
+            call win_execute(a:id, 'normal H')
+            return 1
+        endif
+
+        if a:key is# 'L'
+            call win_execute(a:id, 'normal L')
+            return 1
+        endif
+
+        if a:key is# 'M'
+            call win_execute(a:id, 'normal M')
+            return 1
+        endif
+
         call win_execute(a:id, 'let w:prev_key = ""')
         return popup_filter_menu(a:id, a:key)
     endfunc
