@@ -60,10 +60,18 @@ func! s:PopDefOpen(pattern, ...)
         let search_mode = getwinvar(a:id, 'search_mode')
         let search_pattern = getwinvar(a:id, 'search_pattern')
 
+        " TODO: 行番号をスキップするかどうか検討
         if search_mode
             if a:key is# "\<Enter>"
-                call win_execute(a:id, printf("normal /%s\<Enter>", search_pattern))
-                call win_execute(a:id, 'normal zz')
+                " TODO: パターンが見つからなかった場合のエラー対応
+                try
+                    call win_execute(a:id, printf("normal! /%s\<Enter>", search_pattern))
+                    call win_execute(a:id, 'normal! zz')
+                catch
+                    echohl ErrorMsg
+                    echo v:exception
+                    echohl None
+                endtry
                 call setwinvar(a:id, 'search_mode', 0)
                 call popup_setoptions(a:id, #{title: ''})
                 return 1
@@ -81,7 +89,8 @@ func! s:PopDefOpen(pattern, ...)
                 call popup_setoptions(a:id, #{title: SearchTitle('')})
                 return 1
             endif
-            if a:key =~ '[-.,_/+=%()a-zA-Z0-9 ]'
+            "if a:key =~ '[-.,_/\^*?|$+=%()a-zA-Z0-9 ]'
+            if char2nr(a:key) > 0x1f && char2nr(a:key) < 0x7f
                 let search_pattern .= a:key
                 call setwinvar(a:id, 'search_pattern', search_pattern)
                 call popup_setoptions(a:id, #{title: SearchTitle(search_pattern)})
@@ -92,8 +101,15 @@ func! s:PopDefOpen(pattern, ...)
         " n: search forward
         if a:key is# 'n'
             if !empty(search_pattern)
-                call win_execute(a:id, printf("normal /%s\<Enter>", search_pattern))
-                call win_execute(a:id, 'normal zz')
+                " TODO: パターンが見つからなかった場合のエラー対応
+                try
+                    call win_execute(a:id, printf("normal! /%s\<Enter>", search_pattern))
+                    call win_execute(a:id, 'normal! zz')
+                catch
+                    echohl ErrorMsg
+                    echo v:exception
+                    echohl None
+                endtry
             endif
             return 1
         endif
@@ -101,8 +117,9 @@ func! s:PopDefOpen(pattern, ...)
         " N: search backward
         if a:key is# 'N'
             if !empty(search_pattern)
-                call win_execute(a:id, printf("normal ?%s\<Enter>", search_pattern))
-                call win_execute(a:id, 'normal zz')
+                " TODO: パターンが見つからなかった場合のエラー対応
+                call win_execute(a:id, printf("normal! ?%s\<Enter>", search_pattern))
+                call win_execute(a:id, 'normal! zz')
             endif
             return 1
         endif
@@ -123,7 +140,7 @@ func! s:PopDefOpen(pattern, ...)
 
         " <End>: Move to last line
         if a:key is# "\<End>"
-            call win_execute(a:id, 'normal G')
+            call win_execute(a:id, 'normal! G')
             return 1
         endif
 
@@ -138,9 +155,9 @@ func! s:PopDefOpen(pattern, ...)
         if a:key is# 'G'
             let num_arg = str2nr(join(getwinvar(a:id, 'char_stack'), ''))
             if num_arg > 0
-                call win_execute(a:id, printf('normal %dG', num_arg))
+                call win_execute(a:id, printf('normal! %dG', num_arg))
             else
-                call win_execute(a:id, 'normal G')
+                call win_execute(a:id, 'normal! G')
             endif
             call setwinvar(a:id, 'char_stack', [])
             return 1
@@ -159,7 +176,7 @@ func! s:PopDefOpen(pattern, ...)
             if num_arg < 1
                 let num_arg = 1
             endif
-            call win_execute(a:id, printf('normal %d%s', num_arg, a:key))
+            call win_execute(a:id, printf('normal! %d%s', num_arg, a:key))
             call setwinvar(a:id, 'char_stack', [])
             return 1
         endif
@@ -179,7 +196,7 @@ func! s:PopDefOpen(pattern, ...)
         endif
         echo defs[a:result-1]
         let lnum = matchlist(defs[a:result-1], '^\s*\(\d\+\)')[1]
-        execute printf('silent normal %sG', lnum)
+        execute printf('silent normal! %sG', lnum)
         silent normal zz
     endfunc
 
@@ -193,7 +210,7 @@ func! s:PopDefOpen(pattern, ...)
     call setwinvar(winid, 'search_pattern', '')
     call setwinvar(winid, 'char_stack', [])
     if here > 1
-        call win_execute(winid, printf('normal %dj', here-1))
+        call win_execute(winid, printf('normal! %dj', here-1))
     endif
 endfunc
 
