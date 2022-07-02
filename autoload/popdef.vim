@@ -10,8 +10,7 @@ if !exists('g:popdef_maxheight')
     let g:popdef_maxheight = 40
 endif
 
-" TODO: support function
-" TODO: support list of patterns or functions
+" TODO: support function pattern
 let s:popdef_default_patterns = #{
     \ asciidoc: '^=\{1,6} ',
     \ c:        '^[a-zA-Z_]\+.*)\( *{\)\?$',
@@ -21,16 +20,23 @@ let s:popdef_default_patterns = #{
     \ vim:      '^\s*func',
     \}
 
-" TODO: show message if pattern not found
 func! popdef#PopDefDispatch()
     let ft_var_name = printf('popdef_%s_pattern', &filetype)
     let pattern = get(g:, ft_var_name, '')
     if empty(pattern)
         let pattern = get(s:popdef_default_patterns, &filetype, '')
     endif
-    if !empty(pattern)
-        call s:PopDefOpen(pattern)
+    if empty(pattern)
+        call s:ShowError(printf('PopDef: no pattern for filetype=%s', &filetype))
+        return
     endif
+    call s:PopDefOpen(pattern)
+endfunc
+
+func! s:ShowError(message)
+    echohl ErrorMsg
+    echo a:message
+    echohl None
 endfunc
 
 func! s:PopDefOpen(pattern, ...)
@@ -60,17 +66,13 @@ func! s:PopDefOpen(pattern, ...)
         let search_mode = getwinvar(a:id, 'search_mode')
         let search_pattern = getwinvar(a:id, 'search_pattern')
 
-        " TODO: 行番号をスキップするかどうか検討
         if search_mode
             if a:key is# "\<Enter>"
-                " TODO: パターンが見つからなかった場合のエラー対応
                 try
                     call win_execute(a:id, printf("normal! /%s\<Enter>", search_pattern))
                     call win_execute(a:id, 'normal! zz')
                 catch
-                    echohl ErrorMsg
-                    echo v:exception
-                    echohl None
+                    call s:ShowError(v:exception)
                 endtry
                 call setwinvar(a:id, 'search_mode', 0)
                 call popup_setoptions(a:id, #{title: ''})
@@ -101,14 +103,11 @@ func! s:PopDefOpen(pattern, ...)
         " n: search forward
         if a:key is# 'n'
             if !empty(search_pattern)
-                " TODO: パターンが見つからなかった場合のエラー対応
                 try
                     call win_execute(a:id, printf("normal! /%s\<Enter>", search_pattern))
                     call win_execute(a:id, 'normal! zz')
                 catch
-                    echohl ErrorMsg
-                    echo v:exception
-                    echohl None
+                    call s:ShowError(v:exception)
                 endtry
             endif
             return 1
@@ -117,9 +116,12 @@ func! s:PopDefOpen(pattern, ...)
         " N: search backward
         if a:key is# 'N'
             if !empty(search_pattern)
-                " TODO: パターンが見つからなかった場合のエラー対応
-                call win_execute(a:id, printf("normal! ?%s\<Enter>", search_pattern))
-                call win_execute(a:id, 'normal! zz')
+                try
+                    call win_execute(a:id, printf("normal! ?%s\<Enter>", search_pattern))
+                    call win_execute(a:id, 'normal! zz')
+                catch
+                    call s:ShowError(v:exception)
+                endtry
             endif
             return 1
         endif
@@ -181,7 +183,7 @@ func! s:PopDefOpen(pattern, ...)
             return 1
         endif
 
-        " Push char stack for `gg` command and <count> arg
+        " For `gg` and <count> arg
         if a:key =~ '[g0-9]'
             call setwinvar(a:id, 'char_stack', getwinvar(a:id, 'char_stack') + [a:key])
             return 1
