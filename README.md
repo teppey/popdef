@@ -4,12 +4,12 @@ Popdef is a Vim plugin that displays a list of function and class names in
 the popup window. You can move to the selected line from the displayed
 list. It is useful to get an overview of the source code.
 
-![]()
+![popdef](popdef.png)
 
 By default, the following file types are supported: AsciiDoc, C, C++,
 Python, Markdown, Vim.  File types not supported by default can be easily
-added. See the description of Variables section in doc/popdef.txt for
-details.
+added. See the description of Variables section in
+[doc/popdef.txt](doc/popdef.txt) for details.
 
 
 ## Requirements
@@ -33,7 +33,7 @@ this command to a keymap, for example, set the following in ~/.vimrc:
 
     nnoremap <silent> <Leader>d :PopDef<CR>
 
-# Key Mapping
+## Key Mapping
 
 - j: `<count>` line downward
 - k: `<count>` line upward
