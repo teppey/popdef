@@ -21,8 +21,8 @@ let s:popdef_default_patterns = #{
     \}
 
 func! popdef#PopDefDispatch()
-    let ft_var_name = printf('popdef_%s_pattern', &filetype)
-    let pattern = get(g:, ft_var_name, '')
+    let popdef_patterns = get(g:, 'popdef_patterns', {})
+    let pattern = get(popdef_patterns, &filetype, '')
     if empty(pattern)
         let pattern = get(s:popdef_default_patterns, &filetype, '')
     endif
