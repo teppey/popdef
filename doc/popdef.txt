@@ -1,4 +1,4 @@
-*popdef.txt*  Plugin for show the list of definitions in the popup window
+*popdef.txt*  Plugin for show a list of definitions in the popup window
 
 Version: 0.5
 Author: Teppei Hamada <temada@gmail.com>
@@ -11,40 +11,90 @@ Author: Teppei Hamada <temada@gmail.com>
 ==============================================================================
 1. Overview ~
                                                                 *popdef-intro*
-This plugin displays a list of function and class names in a popup window.
-このプラグインは関数やクラス名のリストをポップアップウィンドウに表示します。
 
-You can move to the selected line from the displayed list.
-表示されたリストから選択した行に移動することができます。
+This plugin displays a list of function and class names in the popup window.
+You can move to the selected line from the displayed list.By default, the
+following file types are supported: AsciiDoc, C, C++, Python, Markdown, Vim.
 
-By default, the following file types are supported: AsciiDoc, C, C++, Python, Markdown, Vim
-デフォルトでは以下のファイルタイプに対応しています: AsciiDoc, C, C++, Python, Markdown, Vim
+File types not supported by default can be easily added by setting the pattern
+to the variable |popdef-patterns|. See the description of |popdef-patterns|
+for details.
 
-It can be easily added by specifying a function or class definition pattern.
-関数やクラス定義のパターンを指定することで、簡単に追加することができます。
+This plugin was inspired by rdefs.
 
-    Example: add Ruby pattern
-        let g:popdef_ruby_pattern = '\s*\(def\|class\|module\)\s'
+    https://github.com/knsmr/rdefs
+
 
 ==============================================================================
 2. Command ~
-                                                             *popdef-commands*
-:PopDef
+                                                              *popdef-command*
+
+:PopDef                                                        *popdef-popdef*
+    Displays a list of function and class names in the popup window.
+    Example of map to this command: >
+
+        nnoremap <silent> <Leader>d :PopDef<CR>
+<
 
 
 ==============================================================================
 3. Variable ~
-                                                            *popdef-variables*
-g:popdef_maxheight
+                                                             *popdef-variable*
+
+g:popdef_maxheight                                          *popdef-maxheight*
     Maximum height of popup window.
 
-g:popdef_{filetype}_pattern
-    filetypeのパターンを指定します。
+g:popdef_patterns                                            *popdef-patterns*
+    A dictionary whose keys are filetype names and whose values are patterns
+    of function and class names. The pattern corresponding to the filetype of
+    the current buffer is retrieved from this variable, and the lines matching
+    the pattern are displayed in a popup window. Example: >
+
+    let popdef_patterns = #{ruby: '\s*\(def\|class\|module\)\s'}
+<
 
 
 ==============================================================================
 4. Key Mapping ~
                                                          *popdef-key-mappings*
 
+The following key mappings are available in the popup window.
 
- vim:tw=78:ts=4:noet:ft=help:norl:
+j                                                                   *popdef-j*
+    <count> lines downward
+
+k                                                                   *popdef-k*
+    <count> lines upward
+
+H                                                                   *popdef-H*
+    Line <count> from top of window
+
+M                                                                   *popdef-M*
+    Middle line of window
+
+L                                                                   *popdef-L*
+    Line <count> from bottom of window
+
+CTRL-F                                                         *popdef-CTRL-F*
+    Page down
+
+CTRL-B                                                         *popdef-CTRL-B*
+    Page up
+
+gg                                                                 *popdef-gg*
+    Move to first line
+
+G                                                                   *popdef-G*
+    Goto line <count>, default last line
+
+/                                                                   *popdef-/*
+    Enter search mode
+
+n                                                                   *popdef-n*
+    Search forward
+
+N                                                                   *popdef-N*
+    Search backward
+
+
+ vim:set tw=78 ts=4 noet ft=help norl:
