@@ -1,51 +1,49 @@
 # popdef
 
-popdef は関数やクラス名のリストをポップアップウィンドウに表示する Vim プラグインです。
+Popdef is a Vim plugin that displays a list of function and class names in
+the popup window. You can move to the selected line from the displayed
+list. It is useful to get an overview of the source code.
 
+![]()
 
-ポップアップウィンドウに表示されたリストから選択した行に移動することができます。
-デフォルトでは以下のファイルタイプに対応しています: AsciiDoc, C, C++, Python, Markdown, Vim。
+By default, the following file types are supported: AsciiDoc, C, C++,
+Python, Markdown, Vim.  File types not supported by default can be easily
+added. See the description of Variables section in doc/popdef.txt for
+details.
 
-関数やクラス定義のパターンを指定することで、簡単に追加することができます。
-
-## Feature
 
 ## Requirements
 
-このプラグインはポップアップウィンドウ機能がサポートされたVim 8.2以降のバー
-ジョンで動作します。
+This plugin works with Vim 8.2 or later versions that support the popup window.
+
 
 ## Install
 
-autoload/popdef.vim, plugin/popdef.vim を以下のように配置してください。
+Place `autoload/popdef.vim` and `plugin/popdef.vim` as follows:
 
     ~/.vim/autoload/popdef.vim
     ~/.vim/plugin/popdef.vim
 
-ヘルプファイルが必要であれば、 doc/popdef.txt を以下のように配置して `:helptags doc` を実行してください。
+If you need a help file, place `doc/popdef.txt` as follows and run `:helptags doc`:
 
     ~/.vim/doc/popdef.txt
 
-このプラグインは `:PopDef` というコマンドで起動します。
-このコマンドの実行をキーマップに割り当てるには、例えば~/.vimrcに次のように設定してください。
+This plugin is invoked with the command `:PopDef`. To assign the execution of
+this command to a keymap, for example, set the following in ~/.vimrc:
 
     nnoremap <silent> <Leader>d :PopDef<CR>
 
-# Usage
+# Key Mapping
 
-Key bindings:
-
-- `j`: Line downward
-- `k`: Line upward
-- `H`: Top line of window
-- `M`: Middle line of window
-- `L`: Bottom line of window
-- `<C-f>`: Page down
-- `<C-b>`: Page up
-- `gg`: Go to first line
-- `G`: Go to last line
-- `/`: Search mode
-- `n`: Search forward
-- `N`: Search backward
-
-# Customization
+- j: `<count>` line downward
+- k: `<count>` line upward
+- H: Line `<count>` from top of window
+- M: Middle line of window
+- L: Line `<count>` from bottom of window
+- CTRL-F: Page down
+- CTRL-B: Page up
+- gg: Go to first line
+- G: Goto line `<count>`, default last line
+- /: Enter search mode
+- n: Search forward
+- N: Search backward

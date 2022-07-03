@@ -4,21 +4,24 @@ Version: 0.5
 Author: Teppei Hamada <temada@gmail.com>
 
 1. Overview                                                     |popdef-intro|
-2. Command                                                    |popdef-command|
-3. Variable                                                  |popdef-variable|
-4. Key-Mapping                                            |popdef-key-mapping|
+2. Requirements                                          |popdef-requirements|
+3. Install                                                    |popdef-install|
+4. Command                                                    |popdef-command|
+5. Variable                                                  |popdef-variable|
+6. Key-Mapping                                            |popdef-key-mapping|
 
 ==============================================================================
 1. Overview ~
                                                                 *popdef-intro*
 
 This plugin displays a list of function and class names in the popup window.
-You can move to the selected line from the displayed list.By default, the
-following file types are supported: AsciiDoc, C, C++, Python, Markdown, Vim.
+You can move to the selected line from the displayed list. It is useful to get
+an overview of the source code.
 
-File types not supported by default can be easily added by setting the pattern
-to the variable |popdef-patterns|. See the description of |popdef-patterns|
-for details.
+By default, the following file types are supported: AsciiDoc, C, C++, Python,
+Markdown, Vim. File types not supported by default can be easily added by
+setting the pattern to the variable |popdef-patterns|. See the description of
+|popdef-patterns| for details.
 
 This plugin was inspired by rdefs.
 
@@ -26,10 +29,41 @@ This plugin was inspired by rdefs.
 
 
 ==============================================================================
-2. Command ~
+2. Requirements ~
+                                                         *popdef-requirements*
+
+This plugin works with Vim 8.2 or later versions that support the popup
+window.
+
+
+==============================================================================
+3. Install ~
+                                                              *popdef-install*
+
+Place `autoload/popdef.vim` and `plugin/popdef.vim` as follows: >
+
+    ~/.vim/autoload/popdef.vim
+    ~/.vim/plugin/popdef.vim
+<
+
+If you need a help file, place `doc/popdef.txt` as follows and run
+`:helptags doc`: >
+
+    ~/.vim/doc/popdef.txt
+<
+
+This plugin is invoked with the command |:PopDef|. To assign the execution of
+this command to a keymap, for example, set the following in ~/.vimrc: >
+
+    nnoremap <silent> <Leader>d :PopDef<CR>
+<
+
+
+==============================================================================
+4. Command ~
                                                               *popdef-command*
 
-:PopDef                                                        *popdef-popdef*
+:PopDef                                              *:PopDef* *popdef-popdef*
     Displays a list of function and class names in the popup window.
     Example of map to this command: >
 
@@ -38,7 +72,7 @@ This plugin was inspired by rdefs.
 
 
 ==============================================================================
-3. Variable ~
+5. Variable ~
                                                              *popdef-variable*
 
 g:popdef_maxheight                                          *popdef-maxheight*
@@ -55,7 +89,7 @@ g:popdef_patterns                                            *popdef-patterns*
 
 
 ==============================================================================
-4. Key Mapping ~
+6. Key Mapping ~
                                                          *popdef-key-mappings*
 
 The following key mappings are available in the popup window.
