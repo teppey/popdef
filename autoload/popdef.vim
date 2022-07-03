@@ -10,7 +10,6 @@ if !exists('g:popdef_maxheight')
     let g:popdef_maxheight = 40
 endif
 
-" TODO: support function pattern
 let s:popdef_default_patterns = #{
     \ asciidoc: '^=\{1,6} ',
     \ c:        '^[a-zA-Z_]\+.*)\( *{\)\?$',
