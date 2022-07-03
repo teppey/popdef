@@ -19,14 +19,20 @@ This plugin works with Vim 8.2 or later versions that support the popup window.
 
 ## Install
 
-Place `autoload/popdef.vim` and `plugin/popdef.vim` as follows:
+Place `autoload/popdef.vim` and `plugin/popdef.vim` into runtime directory.
+
+Unix/macOS:
 
     ~/.vim/autoload/popdef.vim
     ~/.vim/plugin/popdef.vim
 
-If you need a help file, place `doc/popdef.txt` as follows and run `:helptags doc`:
+Windows:
 
-    ~/.vim/doc/popdef.txt
+    %USERPROFILE%\vimfiles\autoload\popdef.vim
+    %USERPROFILE%\vimfiles\plugin\popdef.vim
+
+If you need a help file, place `doc/popdef.txt` into runtime directory and run
+`:helptags doc` command.
 
 This plugin is invoked with the command `:PopDef`. To assign the execution of
 this command to a keymap, for example, set the following in ~/.vimrc:
