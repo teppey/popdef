@@ -20,6 +20,7 @@ let s:popdef_default_patterns = #{
     \ python:   '\s*\(def\|class\)\s\+[_a-zA-Z+0-9]\+',
     \ ruby:     '\s*\(def\|class\|module\)\s',
     \ rust:     '\s*\(fn\|impl\(<.\{-}>\)\?\|trait\|struct\)\s',
+    \ scheme:   '(define',
     \ vim:      '^\s*func',
     \}
 

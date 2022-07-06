@@ -18,10 +18,10 @@ This plugin displays a list of function and class names in the popup window.
 You can move to the selected line from the displayed list. It is useful to get
 an overview of the source code.
 
-By default, the following file types are supported: AsciiDoc, C, C++, Python,
-Markdown, Vim. File types not supported by default can be easily added by
-setting the pattern to the variable |popdef-patterns|. See the description of
-|popdef-patterns| for details.
+By default, the following file types are supported: AsciiDoc, C, C++, Go,
+Markdown, Perl, Python, Ruby, Rust, Scheme, Vim. File types not supported by
+default can be easily added by setting the pattern to the variable
+|popdef-patterns|. See the description of |popdef-patterns| for details.
 
 This plugin was inspired by rdefs.
 
