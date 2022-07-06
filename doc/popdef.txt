@@ -77,8 +77,8 @@ this command to a keymap, for example, set the following in ~/.vimrc: >
 5. Variable ~
                                                              *popdef-variable*
 
-g:popdef_maxheight                                          *popdef-maxheight*
-    Maximum height of popup window.
+g:popdef_maxheight                                           *popdef-maxheight*
+    Maximum height of popup window. (default 40)
 
 g:popdef_patterns                                            *popdef-patterns*
     A dictionary whose keys are filetype names and whose values are patterns
