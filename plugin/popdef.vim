@@ -1,7 +1,7 @@
 " File: popdef.vim
 " Description: Show a list of definitions (function, class, etc) in the popup window
 " Author: Teppei Hamada <temada@gmail.com>
-" Version: 0.5
+" Version: 1.0
 
 if exists('g:loaded_popdef')
   finish

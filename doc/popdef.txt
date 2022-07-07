@@ -1,6 +1,6 @@
 *popdef.txt*  Plugin for show a list of definitions in the popup window
 
-Version: 0.5
+Version: 1.0
 Author: Teppei Hamada <temada@gmail.com>
 
 1. Overview                                                     |popdef-intro|
