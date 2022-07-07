@@ -32,7 +32,8 @@ Windows:
     %USERPROFILE%\vimfiles\plugin\popdef.vim
 
 If you need a help file, place `doc/popdef.txt` into runtime directory and run
-`:helptags doc` command.
+`:helptags ~/.vim/doc` (Unix/macOS) or `:helptags %USERPROFILE%\vimfiles\doc`
+(Windows).
 
 This plugin is invoked with the command `:PopDef`. To assign the execution of
 this command to a keymap, for example, set the following in ~/.vimrc:
