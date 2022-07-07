@@ -1,5 +1,5 @@
 " File: popdef.vim
-" Description: Show the list of definitions (function, class, etc) in the popup window
+" Description: Displays a list of definitions (function, class, etc) in the popup window
 " Author: Teppei Hamada <temada@gmail.com>
 " Version: 1.0
 
