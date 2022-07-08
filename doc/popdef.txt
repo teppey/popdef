@@ -125,13 +125,16 @@ G                                                                   *popdef-G*
     Goto line <count>, default last line
 
 /                                                                   *popdef-/*
-    Enter search mode
+    Forward search
+
+?                                                                   *popdef-?*
+    Backward search
 
 n                                                                   *popdef-n*
-    Search forward
+    Repeat the latest '/' or '?'
 
 N                                                                   *popdef-N*
-    Search backward
+    Repeat the latest '/' or '?' in opposite direction
 
 
  vim:set tw=78 ts=4 noet ft=help norl:

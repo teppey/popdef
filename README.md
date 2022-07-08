@@ -51,6 +51,7 @@ this command to a keymap, for example, set the following in ~/.vimrc:
 - CTRL-B: Page up
 - gg: Go to first line
 - G: Goto line `<count>`, default last line
-- /: Enter search mode
-- n: Search forward
-- N: Search backward
+- /: Forward search
+- ?: Backward search
+- n: Repeat the latest '/' or '?'
+- N: Repeat the latest '/' or '?' in opposite direction

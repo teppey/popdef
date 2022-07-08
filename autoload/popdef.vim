@@ -72,7 +72,6 @@ func! s:PopDefOpen(pattern, ...)
         echo defs[a:result-1]
         let lnum = matchlist(defs[a:result-1], '^\s*\(\d\+\)')[1]
         execute printf('silent normal! %sG', lnum)
-        silent normal zz
     endfunc
 
     let winid = popup_menu(defs, #{
@@ -83,6 +82,7 @@ func! s:PopDefOpen(pattern, ...)
                 \})
     call setwinvar(winid, 'search_mode', 0)
     call setwinvar(winid, 'search_pattern', '')
+    call setwinvar(winid, 'search_backward', 0)
     call setwinvar(winid, 'char_stack', [])
     if here > 1
         call win_execute(winid, printf('normal! %dj', here-1))
@@ -90,15 +90,16 @@ func! s:PopDefOpen(pattern, ...)
 endfunc
 
 func! s:MenuFilter(id, key)
-    let SearchTitle = {pattern -> printf(' Search: %s ', pattern)}
     let search_mode = getwinvar(a:id, 'search_mode')
     let search_pattern = getwinvar(a:id, 'search_pattern')
+    let search_backward = getwinvar(a:id, 'search_backward')
+    let search_commands = ['/', '?']
+    let SearchTitle = {pattern -> printf(' %s%s ', search_commands[getwinvar(a:id, 'search_backward')], pattern)}
 
     if search_mode
         if a:key is# "\<Enter>"
             try
-                call win_execute(a:id, printf("normal! /%s\<Enter>", search_pattern))
-                call win_execute(a:id, 'normal! zz')
+                call win_execute(a:id, printf("normal! %s%s\<Enter>", search_commands[search_backward], search_pattern))
             catch
                 call s:ShowError(v:exception)
             endtry
@@ -119,7 +120,6 @@ func! s:MenuFilter(id, key)
             call popup_setoptions(a:id, #{title: SearchTitle('')})
             return 1
         endif
-        "if a:key =~ '[-.,_/\^*?|$+=%()a-zA-Z0-9 ]'
         if char2nr(a:key) > 0x1f && char2nr(a:key) < 0x7f
             let search_pattern .= a:key
             call setwinvar(a:id, 'search_pattern', search_pattern)
@@ -128,12 +128,13 @@ func! s:MenuFilter(id, key)
         endif
     endif
 
-    " n: search forward
-    if a:key is# 'n'
+    " n: Repeat the latest '/' or '?'
+    " N: Repeat the latest '/' or '?' in opposite direction
+    if a:key is# 'n' || a:key is# 'N'
         if !empty(search_pattern)
+            let command =  search_commands[(a:key is# 'n') ? search_backward : !search_backward]
             try
-                call win_execute(a:id, printf("normal! /%s\<Enter>", search_pattern))
-                call win_execute(a:id, 'normal! zz')
+                call win_execute(a:id, printf("normal! %s%s\<Enter>", command, search_pattern))
             catch
                 call s:ShowError(v:exception)
             endtry
@@ -141,24 +142,13 @@ func! s:MenuFilter(id, key)
         return 1
     endif
 
-    " N: search backward
-    if a:key is# 'N'
-        if !empty(search_pattern)
-            try
-                call win_execute(a:id, printf("normal! ?%s\<Enter>", search_pattern))
-                call win_execute(a:id, 'normal! zz')
-            catch
-                call s:ShowError(v:exception)
-            endtry
-        endif
-        return 1
-    endif
-
-    " /: Enter search mode
-    if a:key is# '/'
-        call popup_setoptions(a:id, #{title: SearchTitle('')})
+    " /: Forward search
+    " ?: Backward search
+    if a:key is# '/' || a:key is# '?'
         call setwinvar(a:id, 'search_pattern', '')
         call setwinvar(a:id, 'search_mode', 1)
+        call setwinvar(a:id, 'search_backward', a:key is# '?')
+        call popup_setoptions(a:id, #{title: SearchTitle('')})
         return 1
     endif
 
