@@ -43,16 +43,16 @@ this command to a keymap, for example, set the following in ~/.vimrc:
 ## Key Mapping
 
 - x, CTRL-C, \<Esc>: Close the popup window
-- \<CR>: Close the popup window and jump to selected line
-- j: <count> line downward
-- k: <count> line upward
-- H: Line <count> from top of window
+- \<Space>, \<Enter>: Close the popup window and jump to selected line
+- j: \<count> line downward
+- k: \<count> line upward
+- H: Line \<count> from top of window
 - M: Middle line of window
-- L: Line <count> from bottom of window
+- L: Line \<count> from bottom of window
 - CTRL-F: Page down
 - CTRL-B: Page up
 - gg: Go to first line
-- G: Goto line <count>, default last line
+- G: Goto line \<count>, default last line
 - /: Forward search
 - ?: Backward search
 - n: Repeat the latest `/` or `?`

@@ -102,7 +102,8 @@ CTRL-C                                                         *popdef-CTRL-C*
 <Esc>                                                           *popdef-<Esc>*
     Close the popup window
 
-<CR>                                                             *popdef-<CR>*
+<Space>                                                       *popdef-<Space>*
+<Enter>                                                       *popdef-<Enter>*
     Close the popup window and jump to selected line
 
 j                                                                   *popdef-j*
