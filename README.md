@@ -42,8 +42,8 @@ this command to a keymap, for example, set the following in ~/.vimrc:
 
 ## Key Mapping
 
-- x, CTRL-C, <Esc>: Close the popup window
-- <CR>: Close the popup window and jump to selected line
+- x, CTRL-C, \<Esc>: Close the popup window
+- \<CR>: Close the popup window and jump to selected line
 - j: <count> line downward
 - k: <count> line upward
 - H: Line <count> from top of window
