@@ -97,6 +97,14 @@ g:popdef_patterns                                            *popdef-patterns*
 
 The following key mappings are available in the popup window.
 
+x                                                                   *popdef-x*
+CTRL-C                                                         *popdef-CTRL-C*
+<Esc>                                                           *popdef-<Esc>*
+    Close the popup window
+
+<CR>                                                             *popdef-<CR>*
+    Close the popup window and jump to selected line
+
 j                                                                   *popdef-j*
     <count> lines downward
 
@@ -135,6 +143,15 @@ n                                                                   *popdef-n*
 
 N                                                                   *popdef-N*
     Repeat the latest '/' or '?' in opposite direction
+
+zt                                                                 *popdef-zt*
+    Cursor line to top of window
+
+zz                                                                 *popdef-zz*
+    Cursor line to center of window
+
+zb                                                                 *popdef-zb*
+    Cursor line to bottom of window
 
 
  vim:set tw=78 ts=4 noet ft=help norl:

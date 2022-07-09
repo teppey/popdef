@@ -95,6 +95,7 @@ func! s:MenuFilter(id, key)
     let search_backward = getwinvar(a:id, 'search_backward')
     let search_commands = ['/', '?']
     let SearchTitle = {pattern -> printf(' %s%s ', search_commands[getwinvar(a:id, 'search_backward')], pattern)}
+    let char_stack = getwinvar(a:id, 'char_stack')
 
     if search_mode
         if a:key is# "\<Enter>"
@@ -165,7 +166,7 @@ func! s:MenuFilter(id, key)
     endif
 
     " gg: Move to first line
-    if a:key is# 'g' && getwinvar(a:id, 'char_stack') == ['g']
+    if a:key is# 'g' && char_stack[:-1] == ['g']
         call setwinvar(a:id, 'char_stack', [])
         call win_execute(a:id, '1')
         return 1
@@ -173,7 +174,7 @@ func! s:MenuFilter(id, key)
 
     " G: Goto line <count>, default last line
     if a:key is# 'G'
-        let num_arg = str2nr(join(getwinvar(a:id, 'char_stack'), ''))
+        let num_arg = str2nr(join(char_stack, ''))
         if num_arg > 0
             call win_execute(a:id, printf('normal! %dG', num_arg))
         else
@@ -192,7 +193,7 @@ func! s:MenuFilter(id, key)
     " <C-B>: Page up
     let command_as_is = ['j', 'k', 'H', 'L', 'M', "\<C-F>", "\<C-B>"]
     if index(command_as_is, a:key) >= 0
-        let num_arg = str2nr(join(getwinvar(a:id, 'char_stack'), ''))
+        let num_arg = str2nr(join(char_stack, ''))
         if num_arg < 1
             let num_arg = 1
         endif
@@ -201,9 +202,19 @@ func! s:MenuFilter(id, key)
         return 1
     endif
 
+    " zz: Cursor line to center of window
+    " zt: Cursor line to top of window
+    " zb: Cursor line to bottom of window
+    let command_scroll_cursor = ['z', 't', 'b']
+    if index(command_scroll_cursor, a:key) >= 0 && char_stack[:-1] == ['z']
+        call setwinvar(a:id, 'char_stack', [])
+        call win_execute(a:id, 'normal! z' . a:key)
+        return 1
+    endif
+
     " For `gg` and <count> arg
-    if a:key =~ '[g0-9]'
-        call setwinvar(a:id, 'char_stack', getwinvar(a:id, 'char_stack') + [a:key])
+    if a:key =~ '[gz0-9]'
+        call setwinvar(a:id, 'char_stack', char_stack + [a:key])
         return 1
     endif
 
